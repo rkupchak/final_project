@@ -10,7 +10,7 @@ mixer.init()
 WIDTH, HEIGHT = 900, 600
 
 # картинка фону
-bg_image = image.load("images/wall.jpg")
+bg_image = image.load("images\phone2.jpg")
 #картинки для спрайтів
 fire_image = image.load("images/fieboy.png")
 water_image = image.load("images/watergirl2.png")
