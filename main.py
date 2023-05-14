@@ -25,7 +25,7 @@ gold_image = image.load("images\gold.png")
 
 
 # фонова музика
-mixer.music.load('music/music1.ogg')
+mixer.music.load('music\music2.mp3')
 mixer.music.set_volume(0.3)
 mixer.music.play(-1)
 
@@ -49,48 +49,66 @@ class Player(GameSprite):
     def __init__(self, sprite_img, width, height, x, y, speed = 3):
         super().__init__(sprite_img, width, height, x, y, speed)
         self.speed = 3
-        self.jump_speed = 10
+        self.jump_speed = 8
         self.speed_y = 0
+        self.speed_x = self.speed
         self.gravity = 1
         self.onground = False
+        self.ch = False
 
     def move(self, x, y):
         self.rect.x += x
         self.rect.y += y
     
     def collide (self, platforms):
-        for pl in platforms:
-            if self.rect.colliderect(pl.rect):
-                if self.rect.y <= pl.rect.y:
-                    self.onground = True
-                    self.rect.bottom = pl.rect.top
-                else:
-                    self.onground = False
-                    self.speed_y = 3
-            else:
-                self.onground = False 
+        hits = sprite.spritecollide(self, platforms, False, sprite.collide_mask)
+        if hits:
+            if self.speed_y > 0:
+                if self.rect.y < hits[0].rect.y:
+                    self.rect.bottom = hits[0].rect.top
+                self.speed_y = 0
+                self.onground = True
+        hits = sprite.spritecollide(self, ch, False)
+        if hits:
+            self.ch = True
+        else:
+            self.ch = False
 
     def update(self):
         self.speed_x = 0
 
         keys = key.get_pressed()
+
         if keys[K_UP] and self.onground:
-            self.speed_y = -self.jump_speed
-            self.onground = False
-        if keys[K_DOWN]:
-            self.speed_y = self.speed
+            if self.ch:
+                self.speed_y = -self.speed
+            else:
+                self.speed_y = -self.jump_speed
+                self.onground = False
+        
         if keys[K_LEFT]:
-           self.speed_x = -self.speed
+            self.speed_x = -self.speed
         if keys[K_RIGHT]:
-           self.speed_x = self.speed
+            self.speed_x = self.speed
 
-        if self.speed_y < 10 and not self.onground:
-            self.speed_y += self.gravity
-        if self.speed_y > 0 and self.onground:
-            self.speed_y = 0
+        self.speed_y += self.gravity
 
-        self.collide(platforms)
         self.move(self.speed_x, self.speed_y)
+        self.collide(platforms)
+
+class Text(sprite.Sprite):
+    def __init__(self, text, x, y, font_size=22, font_name="Impact", color = (255, 255, 255)):
+        self.font = font.SysFont(font_name, font_size)
+        self.image = self.font.render(text, True, color)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.color = color
+    def draw(self):
+        window.blit(self.image, self.rect)
+
+    def set_text(self, new_text):
+        self.image = self.font.render(new_text, True, self.color)
 
 class Platform(GameSprite):
     def __init__(self, platform_img, x, y):
@@ -118,7 +136,7 @@ class Ch(GameSprite):
 
 class Kc(GameSprite):
     def __init__(self, platform_img, width, height, x, y):
-        super().__init__(platform_img, 15, 15, x, y)
+        super().__init__(platform_img, 35, 35, x, y)
     
 class Case(GameSprite):
     def __init__(self, platform_img, x, y):
@@ -132,21 +150,19 @@ class Gold(GameSprite):
 window = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Платформер")
 
-
+score_text = Text("Зібрано: 0", 20, 50)
 #додавання фону
 bg = transform.scale(bg_image, (WIDTH, HEIGHT))
 
 # створення спрайтів
 player = Player(pl_image, width = 100, height = 100, x = 200, y = HEIGHT-150)
 
-
-
-
 # основні змінні для гри
 run = True
 finish = False
 clock = time.Clock()
 FPS = 60
+score = 0
 
 platforms = sprite.Group()
 trees = sprite.Group()
@@ -174,13 +190,13 @@ with open('map.txt', 'r') as file:
             elif symbol == 'R':
                 ch.add(Tree(ch_image, x, y))
             elif symbol == 'Y':
-                kc.add(Tree(kc_image, 35, 35, x, y))
+                kc.add(Tree(kc_image, x, y))
             elif symbol == 'U':
-                pl.add(Player(pl_image, 30, 30, x, y))
+                player = Player(pl_image, 30, 30, x, y)
             elif symbol == 'K':
                 kc.add(GameSprite(case_image, 50, 35,x, y))
             elif symbol == 'G':
-                kc.add(GameSprite(gold_image, 20, 20,x, y))
+                gold.add(GameSprite(gold_image, 20, 20,x, y))
             x += 35
         y += 35
         x = 0
@@ -191,15 +207,21 @@ while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
+    spritelist = sprite.spritecollide(player, gold, True)
+    for collide in spritelist:
+        score +=1
 
     player.update()
+
 
     platforms.draw(window)
     trees.draw(window)
     ch.draw(window)
     kc.draw(window)
-    pl.draw(window)
     case.draw(window)
+    score_text.draw()
     gold.draw(window)
+    player.draw()
+
     display.update()
     clock.tick(FPS)
