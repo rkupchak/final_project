@@ -68,6 +68,8 @@ class Player(GameSprite):
                     self.rect.bottom = hits[0].rect.top
                 self.speed_y = 0
                 self.onground = True
+            if self.speed_x != 0:
+                self.speed_x = 0
         hits = sprite.spritecollide(self, ch, False)
         if hits:
             self.ch = True
@@ -205,25 +207,8 @@ with open('map.txt', 'r') as file:
             x += 35
         y += 35
         x = 0
-        
-def set_difficulty(value, difficulty):
-    # Do the job here !
-    pass
 
-def start_the_game():
-    # Do the job here !
-    menu.disable()
 
-menu = pygame_menu.Menu('Space Shooter', WIDTH, HEIGHT,
-                       theme=pygame_menu.themes.THEME_BLUE)
-
-menu.add.text_input('Name :', default='John Doe')
-menu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)], onchange=set_difficulty)
-menu.add.button('Play', start_the_game)
-menu.add.button('Quit', pygame_menu.events.EXIT)
-
-menu.mainloop(window)
-# ігровий цикл
 while run:
     window.blit(bg, (0, 0))
     # перевірка подій
