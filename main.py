@@ -22,6 +22,7 @@ ch_image = image.load("images/platforms__7_-removebg-preview (1) (2).png")
 kc_image = image.load("images\platforms (8) (1).png")
 case_image = image.load("images\case.png")
 gold_image = image.load("images\gold.png")
+bomba_image = image.load("images\platform\bomba.png")
 
 
 # фонова музика
@@ -148,6 +149,10 @@ class Gold(GameSprite):
     def __init__(self, platform_img, x, y):
         super().__init__(platform_img, 15, 15, x, y)
 
+class Bomba(GameSprite):
+    def __init__(self, platform_img, x, y):
+        super().__init__(platform_img, 15, 15, x, y)
+
 # створення вікна
 window = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Платформер")
@@ -178,6 +183,7 @@ kc = sprite.Group()
 pl = sprite.Group()
 case = sprite.Group()
 gold = sprite.Group()
+bomba = sprite.Group()
 
 with open('map.txt', 'r') as file:
     x, y = 0, 0
@@ -204,6 +210,8 @@ with open('map.txt', 'r') as file:
                 kc.add(GameSprite(case_image, 50, 35,x, y))
             elif symbol == 'G':
                 gold.add(GameSprite(gold_image, 20, 20,x, y))
+            elif symbol == 'B':
+                bomba.add(GameSprite(bomba_image, 20, 20,x, y))
             x += 35
         y += 35
         x = 0
@@ -230,6 +238,7 @@ while run:
     ch.draw(window)
     kc.draw(window)
     case.draw(window)
+    bomba.draw(window)
     result_text.draw()
 
 
