@@ -163,6 +163,11 @@ finish = False
 clock = time.Clock()
 FPS = 60
 score = 0
+result_text = Text("Перемога!", WIDTH / 2 - 100, HEIGHT /2, font_size = 50)
+
+font1 = font.SysFont("Impact", 50)
+win = font1.render("YOU WIN!!!", True, (3, 66, 20))
+lose = font1.render("YOU LOSE!!!", True, (255, 0, 0))
 
 platforms = sprite.Group()
 trees = sprite.Group()
@@ -200,6 +205,16 @@ with open('map.txt', 'r') as file:
             x += 35
         y += 35
         x = 0
+
+menu = pygame_menu.Menu('Space Shooter', WIDTH, HEIGHT,
+                       theme=pygame_menu.themes.THEME_BLUE)
+
+menu.add.text_input('Name :', default='John Doe')
+menu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)], onchange=set_difficulty)
+menu.add.button('Play', start_the_game)
+menu.add.button('Quit', pygame_menu.events.EXIT)
+
+menu.mainloop(window)
 # ігровий цикл
 while run:
     window.blit(bg, (0, 0))
@@ -210,6 +225,9 @@ while run:
     spritelist = sprite.spritecollide(player, gold, True)
     for collide in spritelist:
         score +=1
+    spritelist = sprite.spritecollide(player, case, True)
+    for collide in spritelist:
+        result_text.set_text("YOU WIN!")
 
     player.update()
 
@@ -219,6 +237,9 @@ while run:
     ch.draw(window)
     kc.draw(window)
     case.draw(window)
+    result_text.draw()
+
+
     score_text.draw()
     gold.draw(window)
     player.draw()
