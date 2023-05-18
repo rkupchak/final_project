@@ -205,6 +205,14 @@ with open('map.txt', 'r') as file:
             x += 35
         y += 35
         x = 0
+        
+def set_difficulty(value, difficulty):
+    # Do the job here !
+    pass
+
+def start_the_game():
+    # Do the job here !
+    menu.disable()
 
 menu = pygame_menu.Menu('Space Shooter', WIDTH, HEIGHT,
                        theme=pygame_menu.themes.THEME_BLUE)
