@@ -19,10 +19,10 @@ tree_image = image.load("images/trees__2_-removebg-preview.png")
 tree_image2 = image.load("images/trees__3_-removebg-preview.png")
 tree_image3 = image.load("images/trees__4_-removebg-preview.png")
 ch_image = image.load("images/platforms__7_-removebg-preview (1) (2).png")
-kc_image = image.load("images\platforms (8) (1).png")
-case_image = image.load("images\case.png")
-gold_image = image.load("images\gold.png")
-bomba_image = image.load("images\platform\bomba.png")
+kc_image = image.load("images/platforms (8) (1).png")
+case_image = image.load("images/case.png")
+gold_image = image.load("images/gold.png")
+bomba_image = image.load("images/platform/bomba.png")
 
 
 # фонова музика
@@ -49,6 +49,9 @@ class GameSprite(sprite.Sprite):
 class Player(GameSprite):
     def __init__(self, sprite_img, width, height, x, y, speed = 3):
         super().__init__(sprite_img, width, height, x, y, speed)
+        self.right_img = self.image
+        self.left_img = transform.flip(self.image, True, False)
+
         self.speed = 3
         self.jump_speed = 8
         self.speed_y = 0
@@ -91,11 +94,13 @@ class Player(GameSprite):
         
         if keys[K_LEFT]:
             self.speed_x = -self.speed
+            self.image = slef.left_img
         if keys[K_RIGHT]:
             self.speed_x = self.speed
+            self.image = self.right_img
 
         self.speed_y += self.gravity
-
+        self.collide(platforms)
         self.move(self.speed_x, self.speed_y)
         self.collide(platforms)
 
@@ -207,7 +212,7 @@ with open('map.txt', 'r') as file:
             elif symbol == 'U':
                 player = Player(pl_image, 30, 30, x, y)
             elif symbol == 'K':
-                kc.add(GameSprite(case_image, 50, 35,x, y))
+                case.add(GameSprite(case_image, 50, 35,x, y))
             elif symbol == 'G':
                 gold.add(GameSprite(gold_image, 20, 20,x, y))
             elif symbol == 'B':
@@ -223,12 +228,15 @@ while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
-    spritelist = sprite.spritecollide(player, gold, True)
-    for collide in spritelist:
-        score +=1
-    spritelist = sprite.spritecollide(player, case, True)
-    for collide in spritelist:
-        result_text.set_text("YOU WIN!")
+    if not finish:
+        spritelist = sprite.spritecollide(player, gold, True)
+        for collide in spritelist:
+            score +=1
+            score_text.set_text("Зібрано:"+str(score))
+        spritelist = sprite.spritecollide(player, case, True)
+        for collide in spritelist:
+            result_text.set_text("YOU WIN!")
+            finish = True
 
     player.update()
 
@@ -245,6 +253,8 @@ while run:
     score_text.draw()
     gold.draw(window)
     player.draw()
+    if finish:
+        result_text.draw()
 
     display.update()
     clock.tick(FPS)
