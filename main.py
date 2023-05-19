@@ -53,7 +53,7 @@ class Player(GameSprite):
         self.left_img = transform.flip(self.image, True, False)
 
         self.speed = 3
-        self.jump_speed = 8
+        self.jump_speed = 10
         self.speed_y = 0
         self.speed_x = self.speed
         self.gravity = 1
@@ -94,7 +94,7 @@ class Player(GameSprite):
         
         if keys[K_LEFT]:
             self.speed_x = -self.speed
-            self.image = slef.left_img
+            self.image = self.left_img
         if keys[K_RIGHT]:
             self.speed_x = self.speed
             self.image = self.right_img
@@ -102,7 +102,7 @@ class Player(GameSprite):
         self.speed_y += self.gravity
         self.collide(platforms)
         self.move(self.speed_x, self.speed_y)
-        self.collide(platforms)
+
 
 class Text(sprite.Sprite):
     def __init__(self, text, x, y, font_size=22, font_name="Impact", color = (255, 255, 255)):
@@ -235,10 +235,17 @@ while run:
             score_text.set_text("Зібрано:"+str(score))
         spritelist = sprite.spritecollide(player, case, True)
         for collide in spritelist:
-            result_text.set_text("YOU WIN!")
+            result_text.set_text("YOU WIN!!!")
+            finish = True
+        spritelist = sprite.spritecollide(player, bomba, True)
+        for collide in spritelist:
+            result_text.set_text("YOU LOSE!!!")
             finish = True
 
-    player.update()
+        if player.rect.y > HEIGHT:
+            result_text.set_text("YOU LOSE!!!")
+            finish = True
+        player.update()
 
 
     platforms.draw(window)
@@ -247,7 +254,6 @@ while run:
     kc.draw(window)
     case.draw(window)
     bomba.draw(window)
-    result_text.draw()
 
 
     score_text.draw()
