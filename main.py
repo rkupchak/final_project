@@ -54,7 +54,7 @@ class Player(GameSprite):
         self.left_img = transform.flip(self.image, True, False)
 
         self.speed = 3
-        self.jump_speed = 12.5
+        self.jump_speed = 15
         self.speed_y = 0
         self.speed_x = self.speed
         self.gravity = 1
@@ -65,7 +65,7 @@ class Player(GameSprite):
         self.rect.x += x
         self.rect.y += y
     
-def collide (self, platforms):
+    def collide (self, platforms):
 
         hits = sprite.spritecollide(self, platforms, False, sprite.collide_mask)
         for platform in hits:
@@ -136,41 +136,9 @@ class Platform(GameSprite):
     def __init__(self, platform_img, x, y):
         super().__init__(platform_img, 35, 35, x, y)
 
-class Platform2(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 35, 35, x, y)
-
 class Tree(GameSprite):
     def __init__(self, platform_img, x, y):
         super().__init__(platform_img, 50, 85, x, y)
-
-class Tree2(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 20, 10, x, y)
-
-class Tree3(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 15, 30, x, y)
-
-class Ch(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 15, 30, x, y)
-
-class Kc(GameSprite):
-    def __init__(self, platform_img, width, height, x, y):
-        super().__init__(platform_img, 35, 35, x, y)
-    
-class Case(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 15, 15, x, y)
-
-class Gold(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 15, 15, x, y)
-
-class Bomba(GameSprite):
-    def __init__(self, platform_img, x, y):
-        super().__init__(platform_img, 15, 15, x, y)
 
 # створення вікна
 window = display.set_mode((WIDTH, HEIGHT))
@@ -247,9 +215,9 @@ def start_the_game():
     menu.disable()
 
 menu = pygame_menu.Menu('PLATFORMER', WIDTH, HEIGHT,
-                       theme=pygame_menu.themes.THEME_DARK)
+                       theme=pygame_menu.themes.THEME_BLUE)
 
-menu.add.text_input('Name :', default='John Doe')
+menu.add.text_input('Name :', default='Kupchak Rostysla')
 menu.add.button('Play', start_the_game)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 
@@ -275,7 +243,7 @@ while run:
             load_level("map2.txt")
             level = 2
             level_text.set_text("Рівень:"+ str(level))
-        spritelist = sprite.spritecollide(player, bomba, True)
+        spritelist = sprite.spritecollide(player, bomba, True, sprite.collide_mask)
         for collide in spritelist:
             result_text.set_text("YOU LOSE!!!")
             finish = True
