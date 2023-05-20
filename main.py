@@ -181,18 +181,17 @@ font1 = font.SysFont("Impact", 50)
 win = font1.render("YOU WIN!!!", True, (3, 66, 20))
 lose = font1.render("YOU LOSE!!!", True, (255, 0, 0))
 
-platforms = sprite.Group()
-trees = sprite.Group()
-ch = sprite.Group()
-kc = sprite.Group()
-pl = sprite.Group()
-case = sprite.Group()
-gold = sprite.Group()
-bomba = sprite.Group()
-
 
 def load_level(mapfile):
-    global player
+    global player, platforms, trees, ch, kc, pl,case, gold, bomba
+    platforms = sprite.Group
+    trees = sprite.Group
+    ch = sprite.Group
+    kc = sprite.Group
+    pl = sprite.Group
+    case = sprite.Group
+    gold = sprite.Group
+    bomba = sprite.Group
     with open(mapfile, 'r') as file:
         x, y = 0, 0
         map = file.readlines()
@@ -225,6 +224,9 @@ def load_level(mapfile):
             x = 0
 
 load_level("map.txt")
+
+level = 1
+
 while run:
     window.blit(bg, (0, 0))
     # перевірка подій
@@ -240,6 +242,7 @@ while run:
         for collide in spritelist:
             result_text.set_text("YOU WIN!!!")
             load_level("map2.txt")
+            level = 2
         spritelist = sprite.spritecollide(player, bomba, True)
         for collide in spritelist:
             result_text.set_text("YOU LOSE!!!")
