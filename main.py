@@ -227,13 +227,14 @@ def load_level(mapfile):
 load_level("map.txt")
 
 level = 1
+level_text = Text("Рівень:"+ str(level), 20, 20)
 
 def start_the_game():
     # Do the job here !
     menu.disable()
 
-menu = pygame_menu.Menu('Space Shooter', WIDTH, HEIGHT,
-                       theme=pygame_menu.themes.THEME_BLUE)
+menu = pygame_menu.Menu('PLATFORMER', WIDTH, HEIGHT,
+                       theme=pygame_menu.themes.THEME_DARK)
 
 menu.add.text_input('Name :', default='John Doe')
 menu.add.button('Play', start_the_game)
@@ -247,7 +248,7 @@ while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
-        if e.key == K_ESCAPE:
+        if e.type==KEYDOWN and e.key == K_ESCAPE:
                 menu.enable()  
                 menu.mainloop(window)
     if not finish:
@@ -260,6 +261,7 @@ while run:
             result_text.set_text("YOU WIN!!!")
             load_level("map2.txt")
             level = 2
+            level_text.set_text("Рівень:"+ str(level))
         spritelist = sprite.spritecollide(player, bomba, True)
         for collide in spritelist:
             result_text.set_text("YOU LOSE!!!")
@@ -282,6 +284,7 @@ while run:
     score_text.draw()
     gold.draw(window)
     player.draw()
+    level_text.draw()
     if finish:
         result_text.draw()
 
