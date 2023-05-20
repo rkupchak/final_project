@@ -190,36 +190,39 @@ case = sprite.Group()
 gold = sprite.Group()
 bomba = sprite.Group()
 
-with open('map.txt', 'r') as file:
-    x, y = 0, 0
-    map = file.readlines()
-    for line in map:
-        for symbol in line:
-            if symbol == 'W':
-                platforms.add(Platform(platform_image, x, y))
-            elif symbol == 'S':
-                platforms.add(Platform(platform_image2, x, y))
-            elif symbol == 'T':
-                trees.add(Tree(tree_image, x, y))
-            elif symbol == 'E':
-                trees.add(Tree(tree_image2, x, y))
-            elif symbol == 'Q':
-                trees.add(Tree(tree_image3, x, y))
-            elif symbol == 'R':
-                ch.add(Tree(ch_image, x, y))
-            elif symbol == 'Y':
-                kc.add(Tree(kc_image, x, y))
-            elif symbol == 'U':
-                player = Player(pl_image, 30, 30, x, y)
-            elif symbol == 'K':
-                case.add(GameSprite(case_image, 50, 35,x, y))
-            elif symbol == 'G':
-                gold.add(GameSprite(gold_image, 20, 20,x, y))
-            elif symbol == 'B':
-                bomba.add(GameSprite(bomba_image, 20, 20,x, y))
-            x += 35
-        y += 35
-        x = 0
+
+def load_level(mapfile):
+    global player
+    with open('mapfile', 'r') as file:
+        x, y = 0, 0
+        map = file.readlines()
+        for line in map:
+            for symbol in line:
+                if symbol == 'W':
+                    platforms.add(Platform(platform_image, x, y))
+                elif symbol == 'S':
+                    platforms.add(Platform(platform_image2, x, y))
+                elif symbol == 'T':
+                    trees.add(Tree(tree_image, x, y))
+                elif symbol == 'E':
+                    trees.add(Tree(tree_image2, x, y))
+                elif symbol == 'Q':
+                    trees.add(Tree(tree_image3, x, y))
+                elif symbol == 'R':
+                    ch.add(Tree(ch_image, x, y))
+                elif symbol == 'Y':
+                    kc.add(Tree(kc_image, x, y))
+                elif symbol == 'U':
+                    player = Player(pl_image, 30, 30, x, y)
+                elif symbol == 'K':
+                    case.add(GameSprite(case_image, 50, 35,x, y))
+                elif symbol == 'G':
+                    gold.add(GameSprite(gold_image, 20, 20,x, y))
+                elif symbol == 'B':
+                    bomba.add(GameSprite(bomba_image, 20, 20,x, y))
+                x += 35
+            y += 35
+            x = 0
 
 
 while run:
@@ -236,7 +239,7 @@ while run:
         spritelist = sprite.spritecollide(player, case, True)
         for collide in spritelist:
             result_text.set_text("YOU WIN!!!")
-            finish = True
+            load_level("map2.txt")
         spritelist = sprite.spritecollide(player, bomba, True)
         for collide in spritelist:
             result_text.set_text("YOU LOSE!!!")
