@@ -1,6 +1,7 @@
 from pygame import *
 from random import randint
 import os
+import pygame_menu
 
 init()
 font.init()
@@ -53,7 +54,7 @@ class Player(GameSprite):
         self.left_img = transform.flip(self.image, True, False)
 
         self.speed = 3
-        self.jump_speed = 15
+        self.jump_speed = 12.5
         self.speed_y = 0
         self.speed_x = self.speed
         self.gravity = 1
@@ -184,14 +185,14 @@ lose = font1.render("YOU LOSE!!!", True, (255, 0, 0))
 
 def load_level(mapfile):
     global player, platforms, trees, ch, kc, pl,case, gold, bomba
-    platforms = sprite.Group
-    trees = sprite.Group
-    ch = sprite.Group
-    kc = sprite.Group
-    pl = sprite.Group
-    case = sprite.Group
-    gold = sprite.Group
-    bomba = sprite.Group
+    platforms = sprite.Group()
+    trees = sprite.Group()
+    ch = sprite.Group()
+    kc = sprite.Group()
+    pl = sprite.Group()
+    case = sprite.Group()
+    gold = sprite.Group()
+    bomba = sprite.Group()
     with open(mapfile, 'r') as file:
         x, y = 0, 0
         map = file.readlines()
@@ -227,12 +228,28 @@ load_level("map.txt")
 
 level = 1
 
+def start_the_game():
+    # Do the job here !
+    menu.disable()
+
+menu = pygame_menu.Menu('Space Shooter', WIDTH, HEIGHT,
+                       theme=pygame_menu.themes.THEME_BLUE)
+
+menu.add.text_input('Name :', default='John Doe')
+menu.add.button('Play', start_the_game)
+menu.add.button('Quit', pygame_menu.events.EXIT)
+
+menu.mainloop(window)
+
 while run:
     window.blit(bg, (0, 0))
     # перевірка подій
     for e in event.get():
         if e.type == QUIT:
             run = False
+        if e.key == K_ESCAPE:
+                menu.enable()  
+                menu.mainloop(window)
     if not finish:
         spritelist = sprite.spritecollide(player, gold, True)
         for collide in spritelist:
