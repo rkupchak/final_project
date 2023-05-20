@@ -65,18 +65,29 @@ class Player(GameSprite):
         self.rect.x += x
         self.rect.y += y
     
-    def collide (self, platforms):
+def collide (self, platforms):
+
         hits = sprite.spritecollide(self, platforms, False, sprite.collide_mask)
-        if hits:
-            if self.speed_y > 0 and self.rect.y < hits[0].rect.y:
-                self.rect.bottom = hits[0].rect.top
+        for platform in hits:
+            if self.speed_y > 0 and abs(self.rect.bottom - platform.rect.top) <= self.speed_y:
+                # Зіткнення з платформою знизу
+                self.rect.bottom = platform.rect.top
                 self.speed_y = 0
                 self.onground = True
-            else self.speed_y < 0 and self.rect.y > hits[0].rect.y:
-                self.rect.top = hits[0].rect.bottom
+            elif self.speed_y < 0 and abs(self.rect.top - platform.rect.bottom) <= abs(self.speed_y):
+                # Зіткнення з платформою зверху
+                self.rect.top = platform.rect.bottom
                 self.speed_y = 0
-            if self.speed_x != 0:
+                self.onground = False
+            elif self.speed_x > 0 and abs(self.rect.right - platform.rect.left) <= self.speed_x:
+                # Зіткнення з платформою зправа
+                self.rect.right = platform.rect.left
                 self.speed_x = 0
+            elif self.speed_x < 0 and abs(self.rect.left - platform.rect.right) <= abs(self.speed_x):
+                # Зіткнення з платформою зліва
+                self.rect.left = platform.rect.right
+                self.speed_x = 0
+
         hits = sprite.spritecollide(self, ch, False)
         if hits:
             self.ch = True
