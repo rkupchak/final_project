@@ -53,7 +53,7 @@ class Player(GameSprite):
         self.left_img = transform.flip(self.image, True, False)
 
         self.speed = 3
-        self.jump_speed = 10
+        self.jump_speed = 15
         self.speed_y = 0
         self.speed_x = self.speed
         self.gravity = 1
@@ -193,7 +193,7 @@ bomba = sprite.Group()
 
 def load_level(mapfile):
     global player
-    with open('mapfile', 'r') as file:
+    with open(mapfile, 'r') as file:
         x, y = 0, 0
         map = file.readlines()
         for line in map:
@@ -224,7 +224,7 @@ def load_level(mapfile):
             y += 35
             x = 0
 
-
+load_level("map.txt")
 while run:
     window.blit(bg, (0, 0))
     # перевірка подій
