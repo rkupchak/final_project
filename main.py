@@ -239,9 +239,12 @@ while run:
             score_text.set_text("Зібрано:"+str(score))
         spritelist = sprite.spritecollide(player, case, True)
         for collide in spritelist:
-            result_text.set_text("YOU WIN!!!")
-            load_level("map2.txt")
-            level = 2
+            if level ==1:
+                load_level("map2.txt")
+                level = 2
+            else:
+                result_text.set_text("YOU WIN!!!")
+                finish = True
             level_text.set_text("Рівень:"+ str(level))
         spritelist = sprite.spritecollide(player, bomba, True, sprite.collide_mask)
         for collide in spritelist:
