@@ -1,17 +1,17 @@
                       
 
-     GGBGGBGGBGGBGGBGGBGGG
+     GG GG GG GG GG GGGGGG
   WWWWWWWWWWWWWWWWWWWWWWWWW
   W        G
-  W       RW
+  W       RWWW
   W       R
   W
   W     G
-  W    RW 
+  W    RWWW
   W    R  
   W    
-  W   G       GGGGGGGGK
-  W  RW      RWWWWWWWWWWWWW
-  W  R       R
+  W   G          GGGGBGGK
+  W  RWWW      WWWWWWWWWWWWW
+  W  R       
 
-SSSSS
+SSSSSSSS
